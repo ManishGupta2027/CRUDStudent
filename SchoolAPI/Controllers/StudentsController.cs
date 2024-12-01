@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolAPI.Data;
-using SchoolAPI.Models;
 
 namespace SchoolAPI.Controllers
 {
@@ -37,6 +35,10 @@ namespace SchoolAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Student>> PostStudent(Student student)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             _context.Student.Add(student);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, student);
